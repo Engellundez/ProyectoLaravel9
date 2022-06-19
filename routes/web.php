@@ -14,5 +14,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
+
+Route::prefix('empleado')->name('empleado.')->middleware('auth')->group(function () {
+	Route::get('/', 'EmpleadoController@index')->name('index');
+	Route::get('crear', 'EmpleadoController@create')->name('create');
+	Route::get('editar/{id}', 'EmpleadoController@edit')->name('edit');
+	Route::post('guardar', 'EmpleadoController@store')->name('store');
+	Route::put('actualizar/{id}', 'EmpleadoController@update')->name('update');
+	Route::delete('eliminar/{id}', 'EmpleadoController@destroy')->name('destroy');
+});
+
+Auth::routes(['register'=>false,'reset'=>false]);
+
+Route::get('/home', function (){
+	return redirect('empleado');
+})->name('home');
